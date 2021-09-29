@@ -1,0 +1,45 @@
+1.
+  arecord --device=plughw:1,0 --format S16_LE --rate 44100 -c1 | aplay --device=plughw:2,0 &
+  arecord --device=plughw:2,0 --format S16_LE --rate 44100 -c1 | aplay --device=plughw:1,0 &
+
+2.  Not working so well
+
+	jackd -R -d alsa -P mt4 -C hw:1,0
+
+	with asoundrc as following
+
+	pcm.mt4 {
+		 type multi
+		 slaves.a.pcm "plughw:headset,0";
+		 slaves.a.channels 2;
+		 slaves.b.pcm "plughw:C320M,0";
+		 slaves.b.channels 2;
+
+		 bindings.0.slave a;
+		 bindings.0.channel 0;
+		 bindings.1.slave a;
+		 bindings.1.channel 1;
+		 bindings.2.slave b;
+		 bindings.2.channel 0;
+		 bindings.3.slave b;
+		 bindings.3.channel 1;
+	}
+
+	ctl.mt4 {
+		 type hw
+		 card 1
+	}
+
+	pcm.multi4 {
+		 type route;
+		 slave.pcm "mt4";
+		 ttable.0.0 1;
+		 ttable.1.1 1;
+		 ttable.2.2 1;
+		 ttable.3.3 1;
+	}
+
+	ctl.multi4 {
+		 type hw;
+		 card 1;
+	}

@@ -1,0 +1,44 @@
+[.....]
+
+UART + GPIO driver
+------------------
+
+GPIO function selector is used to define the operation of the general-purpose I/O pins.
+GPFSEL[0-5] maps all 54 GPIOs.
+
+Each Register handles 10 GPIOs and are split as follows
+
+Example:
+GPFSEL0
+
+Bit  -> 31-30 29-27 26-24 23-21 20-18 17-15 14-12 11-9 8-6 5-3 2-0
+GPIO -> RSVD    9     8     7     6     5     4     3   2   1   0
+
+
+A note on compiler optimization
+-------------------------------
+
+	Consider a loop like the one below
+	
+	while (1) {
+		GPIO_SET(47);
+		GPIO_CLR(35);
+		delay(0x1000);
+		GPIO_SET(35);
+		GPIO_CLR(47);
+		delay(0x1000);
+	}
+
+	Such a loop is never infinte, the while (1) is removed and your LEDs blink only once.
+	We have to have calls to functions that are not inline. Only then it will be honoured
+	as an infinite loop.
+
+	So, a loop like this won't get optimized
+
+	while (1) {
+		blink(47);
+		blink(35);
+	}
+
+	Or, even a loop like the one described by dwelch67.
+

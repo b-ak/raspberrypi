@@ -1,0 +1,118 @@
+Raspberry Pi Wi-Fi
+------------------
+
+1. Start of with
+
+	pi@raspberrypi:~$ sudo iwlist wlan0 scan
+	wlan0     Interface doesn't support scanning : Device or resource busy
+
+	If you encounter this error
+		1. Driver is not there. Check lsusb, demsg and lsmod if your device is registered.
+		2. If Yes, do this
+			sudo ifconfig wlan0 up
+		3. If No Driver, ...
+				[populate when I encounter the error]
+
+
+
+	[Output]
+
+	pi@raspberrypi:~$ sudo iwlist wlan0 scan
+	wlan0     Scan completed :
+          Cell 01 - Address: 5C:F9:6A:D0:56:A2
+                    Channel:6
+                    Frequency:2.437 GHz (Channel 6)
+                    Quality=70/70  Signal level=-26 dBm
+                    Encryption key:on
+                    ESSID:"Tata-Photon-Max-Wi-Fi-56A21"
+                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 11 Mb/s; 18 Mb/s
+                              24 Mb/s; 36 Mb/s; 54 Mb/s
+                    Bit Rates:6 Mb/s; 9 Mb/s; 12 Mb/s; 48 Mb/s
+                    Mode:Master
+                    Extra:tsf=000000007f54dfd8
+                    Extra: Last beacon: 80ms ago
+                    IE: Unknown: 001B546174612D50686F746F6E2D4D61782D57692D46692D3536413231
+                    IE: Unknown: 010882848B962430486C
+                    IE: Unknown: 030106
+                    IE: Unknown: 2A0100
+                    IE: Unknown: 2F0100
+                    IE: Unknown: 32040C121860
+                    IE: Unknown: 2D1A001118FF00000000000000000000000000000000000000000000
+                    IE: Unknown: 3D1606080400000000000000000000000000000000000000
+                    IE: Unknown: DD050050F20500
+                    IE: Unknown: DD720050F204104A0001101044000102103B00010310470010222102030405060708090A0B0C0D0E0F1021000842726F6164636F6D10230006536F66744150102400013010420001301054000800060050F20400011011001542726F6164636F6D2D5A51482D42434D3433333632100800020284
+                    IE: Unknown: DD09001018020100040000
+                    IE: WPA Version 1
+                        Group Cipher : TKIP
+                        Pairwise Ciphers (2) : CCMP TKIP
+                        Authentication Suites (1) : PSK
+                    IE: Unknown: DD180050F2020101800003A4000027A4000042435E0062322F00
+          Cell 02 - Address: 6C:72:20:7C:84:A1
+                    Channel:2
+                    Frequency:2.417 GHz (Channel 2)
+                    Quality=18/70  Signal level=-92 dBm
+                    Encryption key:on
+                    ESSID:"5 floor"
+                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 11 Mb/s; 6 Mb/s
+                              9 Mb/s; 12 Mb/s; 18 Mb/s
+                    Bit Rates:24 Mb/s; 36 Mb/s; 48 Mb/s; 54 Mb/s
+                    Mode:Master
+                    Extra:tsf=00000018f8ab717b
+                    Extra: Last beacon: 1760ms ago
+                    IE: Unknown: 00073520666C6F6F72
+                    IE: Unknown: 010882848B960C121824
+                    IE: Unknown: 030102
+                    IE: Unknown: 050400010000
+                    IE: Unknown: 2A0104
+                    IE: Unknown: 32043048606C
+                    IE: Unknown: 2D1A6E181EFF00000000000000000000000000000000000000000000
+                    IE: Unknown: 3D1602000000000000000000000000000000000000000000
+                    IE: Unknown: 4A0E14000A00B400C800140005001900
+                    IE: Unknown: 7F0101
+                    IE: WPA Version 1
+                        Group Cipher : TKIP
+                        Pairwise Ciphers (1) : CCMP
+                        Authentication Suites (1) : PSK
+                    IE: IEEE 802.11i/WPA2 Version 1
+                        Group Cipher : TKIP
+                        Pairwise Ciphers (1) : CCMP
+                        Authentication Suites (1) : PSK
+                    IE: Unknown: DD180050F2020101000003A4000027A4000042435E0062322F00
+                    IE: Unknown: DD1E00904C336E181EFF00000000000000000000000000000000000000000000
+                    IE: Unknown: DD1A00904C3402000000000000000000000000000000000000000000
+                    IE: Unknown: DD0600E04C020160
+
+2. Configure the following
+		i. /etc/network/interfaces
+			auto wlan0
+			allow-hotplug wlan0
+			iface wlan0 inet dhcp
+				wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+				#wireless-essid Tata-Photon-Max-Wi-Fi-56A21 (add parameters here or in wpa_supplicant.conf)
+
+	2.1 For Open Networks
+			ii. /etc/wpa_supplicant/wpa_supplicant.conf
+				network={
+				ssid="Tata-Photon-Max-Wi-Fi-56A21"
+				key_mgmt=NONE
+				}
+
+	2.2 For WPA-PSK networks with AES+TKIP encryption
+			ii. /etc/wpa_supplicant/wpa_supplicant.conf
+				network={
+				ssid="Tata-Photon-Max-Wi-Fi-56A21"
+				psk="ABCDEF12"
+				}
+
+3. To switch between networks
+	Add the following lines in ~/.bashrc
+		alias eth='sudo ifconfig wlan0 down && sudo ifconfig eth0 up'
+		alias wlan='sudo ifconfig eth0 down && sudo ifconfig wlan0 up'
+
+----------------------------------------------------------------------------
+
+List all active network connections
+	$ iwconfig
+
+
+

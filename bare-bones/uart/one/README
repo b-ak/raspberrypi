@@ -1,0 +1,20 @@
+
+The UART driver does the following:
+1. Accept packet of data via a UART at 115200 baud
+2. Base64 encode it
+3. Transmit the resultant data back in the same packet format
+
+The packet format for both directions shall be as follows
+
+        ------------------------------------------------------------------
+Byte -> |   0    |  1   |  2   |  3.....(2+<data-len>)  |  3+<data-len>  |
+        ------------------------------------------------------------------
+Data -> |   $    | <data-len>  |         <data>         |  <8-bit CRC>   |
+        ------------------------------------------------------------------
+
+<data> shall represent an ASCII string stored as 8-bit unsigned characters
+<data-len> represents the length of <data> stored as an MSB first 16-bit number
+<8-bit-crc> represents an 8-bit CRC with the polynomial 0x85 of the entire packet
+except the CRC byte (bytes 0 .. 2 + <data-len> inclusive)
+
+

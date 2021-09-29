@@ -1,0 +1,7 @@
+pi@raspberrypi:/ $ pactl load-module source="alsa_input.usb-Sennheiser_Communications_Sennheiser_USB_headset-00-headset.analog-mono" sink="alsa_output.usb-Plantronics_Plantronics_C320-M_B52619D040EB8A4588BCB5D525E2A469-00-C320M.analog-stereo"
+Failure: Module initialization failed
+pi@raspberrypi:/ $ pactl load-module module-loopback source="alsa_input.usb-Sennheiser_Communications_Sennheiser_USB_headset-00-headset.analog-mono" sink="alsa_output.usb-Plantronics_Plantronics_C320-M_B52619D040EB8A4588BCB5D525E2A469-00-C320M.analog-stereo"
+25
+pi@raspberrypi:/ $ pactl load-module module-loopback source="alsa_input.usb-Plantronics_Plantronics_C320-M_B52619D040EB8A4588BCB5D525E2A469-00-C320M.analog-stereo" sink="alsa_output.usb-Sennheiser_Communications_Sennheiser_USB_headset-00-headset.analog-stereo"
+26
+

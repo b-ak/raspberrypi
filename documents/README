@@ -1,0 +1,15 @@
+
+---------------------
+Revision Information
+---------------------
+
+Revision 1 PCBs: Raspberry Pis with a revision 1 PCB (September 2012 or earlier) have a different pin assignment on the P1 connector:
+
+P1 pin 3 is GPIO 0 / SDA0 (not GPIO 2)
+P1 pin 5 is GPIO 1 / SCL0 (not GPIO 3)
+P1 pin 13 is GPIO 21 (not GPIO 27)
+
+
+I own a Rev 2.x
+
+

@@ -1,0 +1,171 @@
+alsa force-reload
+alsamixer
+
+speaker-test -c2 -D hw:0,0
+	-D accepts PCM channel names as values, which can be retrieved by running the following:
+
+	pi@raspberrypi:~$ aplay -L | grep :CARD
+	sysdefault:CARD=ALSA
+	dmix:CARD=ALSA,DEV=0
+	dmix:CARD=ALSA,DEV=1
+	dsnoop:CARD=ALSA,DEV=0
+	dsnoop:CARD=ALSA,DEV=1
+	hw:CARD=ALSA,DEV=0
+	hw:CARD=ALSA,DEV=1
+	plughw:CARD=ALSA,DEV=0
+	plughw:CARD=ALSA,DEV=1
+	sysdefault:CARD=headset
+	front:CARD=headset,DEV=0
+	surround21:CARD=headset,DEV=0
+	surround40:CARD=headset,DEV=0
+	surround41:CARD=headset,DEV=0
+	surround50:CARD=headset,DEV=0
+	surround51:CARD=headset,DEV=0
+	surround71:CARD=headset,DEV=0
+	dmix:CARD=headset,DEV=0
+	dsnoop:CARD=headset,DEV=0
+	hw:CARD=headset,DEV=0
+	plughw:CARD=headset,DEV=0
+	0
+
+
+
+aplay /usr/share/scratch/Media/Sounds/Vocals/Singer1.wav
+aplay -d hw:0,0 rockstar01.wav
+	- Upper case (D) gives me an error
+		aplay: set_params:1087: Channels count non available
+
+---------------------------------------------------------
+pi@raspberrypi:~$ cat /proc/asound/pcm
+00-00: bcm2835 ALSA : bcm2835 ALSA : playback 8
+00-01: bcm2835 ALSA : bcm2835 IEC958/HDMI : playback 1
+01-00: USB Audio : USB Audio : playback 1 : capture 1
+02-00: USB Audio : USB Audio : playback 1 : capture 1
+
+pi@raspberrypi:~$ cat /proc/asound/
+ALSA/      card1/     cards      headset/   hwdep      oss/       seq/       version
+card0/     card2/     devices    headset_1/ modules    pcm        timers
+pi@raspberrypi:~$ cat /proc/asound/cards
+ 0 [ALSA           ]: bcm2835 - bcm2835 ALSA
+                      bcm2835 ALSA
+ 1 [headset        ]: USB-Audio - Sennheiser USB headset
+                      Sennheiser Communications Sennheiser USB headset at usb-3f980000.usb-1.3, full
+ 2 [headset_1      ]: USB-Audio - Sennheiser USB headset
+                      Sennheiser Communications Sennheiser USB headset at usb-3f980000.usb-1.4, full
+pi@raspberrypi:~$ cat /proc/asound/modules
+ 0 snd_bcm2835
+ 1 snd_usb_audio
+ 2 snd_usb_audio
+---------------------------------------------------------
+
+cat /etc/modprobe.d/alsa-base.conf
+
+
+aplay -l   (List virtual devices)
+	**** List of PLAYBACK Hardware Devices ****
+	card 0: headset [Sennheiser USB headset], device 0: USB Audio [USB Audio]
+	  Subdevices: 1/1
+	  Subdevice #0: subdevice #0
+	card 1: ALSA [bcm2835 ALSA], device 0: bcm2835 ALSA [bcm2835 ALSA]
+	  Subdevices: 8/8
+	  Subdevice #0: subdevice #0
+	  Subdevice #1: subdevice #1
+	  Subdevice #2: subdevice #2
+	  Subdevice #3: subdevice #3
+	  Subdevice #4: subdevice #4
+	  Subdevice #5: subdevice #5
+	  Subdevice #6: subdevice #6
+	  Subdevice #7: subdevice #7
+	card 1: ALSA [bcm2835 ALSA], device 1: bcm2835 ALSA [bcm2835 IEC958/HDMI]
+	  Subdevices: 1/1
+	  Subdevice #0: subdevice #0
+
+aplay -L	(List PCMs defines)
+
+lsmod | grep '^snd'
+
+In Wheezy
+---------
+
+~/.asoundrc was giving a problem..
+The same didn't exist in root, it used to work..
+
+I renamed the file ~/asoundrc it worked. That is no equivalent to asoundrc file.
+
+(OR) - This works
+
+cat ~/.asoundrc
+
+defaults.ctl.card 0
+defaults.pcm.card 0
+defaults.pcm.device 0
+
+
+
+In Jessie
+----------
+
+http://raspberrypi.stackexchange.com/questions/44012/jessie-rpi-2-usb-audio-input-does-not-work-output-works
+
+1. sudo nano /usr/share/alsa/alsa.conf
+		defaults.ctl.card 1
+		defaults.pcm.card 1
+		defaults.pcm.device 1
+2. pi@raspberrypi:~$
+		cat ~/.asoundrc
+		pcm.!default {
+				type hw
+				card 1
+		}
+
+		ctl.!default {
+				type hw
+				card 1
+		}
+	Works without asoundrc file also
+
+3. aplay --device=plughw:1,0 /usr/share/scratch/Media/Sounds/Vocals/Singer2.wav
+
+	Note: -D hw:CARD,DEVICE
+		  -D plughw:1,0
+		  -D plughw:C320M,0
+		  -D plughw:headset,0
+
+			$ aplay -l
+				**** List of PLAYBACK Hardware Devices ****
+			card 0: ALSA [bcm2835 ALSA], device 0: bcm2835 ALSA [bcm2835 ALSA]
+			  Subdevices: 8/8
+			  Subdevice #0: subdevice #0
+			  Subdevice #1: subdevice #1
+			  Subdevice #2: subdevice #2
+			  Subdevice #3: subdevice #3
+			  Subdevice #4: subdevice #4
+			  Subdevice #5: subdevice #5
+			  Subdevice #6: subdevice #6
+			  Subdevice #7: subdevice #7
+			card 0: ALSA [bcm2835 ALSA], device 1: bcm2835 ALSA [bcm2835 IEC958/HDMI]
+			  Subdevices: 1/1
+			  Subdevice #0: subdevice #0
+			card 1: headset [Sennheiser USB headset], device 0: USB Audio [USB Audio]
+			  Subdevices: 1/1
+			  Subdevice #0: subdevice #0
+			card 2: C320M [Plantronics C320-M], device 0: USB Audio [USB Audio]
+			  Subdevices: 1/1
+			  Subdevice #0: subdevice #0
+
+
+	Normal command is giving me this error
+		aplay: set_params:1239: Channels count non available
+
+4. Playing mp3
+	mpg123 -a hw:1,0 helloworld.mp3 (check this)
+
+
+Jackd
+-----
+$ aplay -l
+card 2: C320M [Plantronics C320-M], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+
+jackd -R -d alsa -d hw:2,0

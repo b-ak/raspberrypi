@@ -1,0 +1,31 @@
+Light Sensor
+
+If This Then That (IFTTT)
+IFTTT is a web service that allows you to set up
+triggers that then cause an action.
+
+The way this works is that the Raspberry Pi sends
+a web request to IFTTT as a trigger and then IFTTT
+performs whatever action you have specified for it.
+In this case, that is sending a notification and playing a song on my Android Phone.
+(I have to have the IFTTT app on the phone as well)
+
+Use the Maker Channel
+The Maker Channel allows you to connect IFTTT to your personal DIY projects.
+With Maker, you can connect a Recipe to any device or service that can make or
+receive a web request (aka webhooks).
+
+The Maker channel provides us a unique key
+https://ifttt.com/maker
+
+Photoresistor - Detects light
+	Light ∝ 1/Resistance
+
+Photo resistor @ GPIO-7
+LED @ GPIO 27
+
+Blink LED 3 times when light is detected and send an event to IFTTT.
+
+The MagPi Issue #37
+
+

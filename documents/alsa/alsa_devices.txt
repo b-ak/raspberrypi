@@ -1,0 +1,46 @@
+pi@raspberrypi:~$ cat /proc/asound/pcm
+00-00: bcm2835 ALSA : bcm2835 ALSA : playback 8
+00-01: bcm2835 ALSA : bcm2835 IEC958/HDMI : playback 1
+01-00: USB Audio : USB Audio : playback 1 : capture 1
+02-00: USB Audio : USB Audio : playback 1 : capture 1
+pi@raspberrypi:~$ cat /proc/asound/cards
+ 0 [ALSA           ]: bcm2835 - bcm2835 ALSA
+                      bcm2835 ALSA
+ 1 [headset        ]: USB-Audio - Sennheiser USB headset
+                      Sennheiser Communications Sennheiser USB headset at usb-3f980000.usb-1.3, full
+ 2 [C320M          ]: USB-Audio - Plantronics C320-M
+                      Plantronics Plantronics C320-M at usb-3f980000.usb-1.4, full speed
+pi@raspberrypi:~$ cat /proc/asound/modules
+ 0 snd_bcm2835
+ 1 snd_usb_audio
+ 2 snd_usb_audio
+pi@raspberrypi:~$ aplay -l
+**** List of PLAYBACK Hardware Devices ****
+card 0: ALSA [bcm2835 ALSA], device 0: bcm2835 ALSA [bcm2835 ALSA]
+  Subdevices: 8/8
+  Subdevice #0: subdevice #0
+  Subdevice #1: subdevice #1
+  Subdevice #2: subdevice #2
+  Subdevice #3: subdevice #3
+  Subdevice #4: subdevice #4
+  Subdevice #5: subdevice #5
+  Subdevice #6: subdevice #6
+  Subdevice #7: subdevice #7
+card 0: ALSA [bcm2835 ALSA], device 1: bcm2835 ALSA [bcm2835 IEC958/HDMI]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 1: headset [Sennheiser USB headset], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 2: C320M [Plantronics C320-M], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+pi@raspberrypi:~$ arecord -l
+**** List of CAPTURE Hardware Devices ****
+card 1: headset [Sennheiser USB headset], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 2: C320M [Plantronics C320-M], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+pi@raspberrypi:~$

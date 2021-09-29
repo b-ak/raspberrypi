@@ -1,0 +1,45 @@
+
+pi@raspberrypi:~/RPi-Audio $ pacmd list-sources | grep -e device.string -e 'name:'
+	name: <alsa_output.usb-Plantronics_Plantronics_C320-M_B52619D040EB8A4588BCB5D525E2A469-00-C320M.analog-stereo.monitor>
+		device.string = "1"
+	name: <alsa_input.usb-Plantronics_Plantronics_C320-M_B52619D040EB8A4588BCB5D525E2A469-00-C320M.analog-stereo>
+		device.string = "front:1"
+	name: <alsa_output.0.analog-stereo.monitor>
+		device.string = "0"
+	name: <combined.monitor>
+	name: <alsa_output.usb-Sennheiser_Communications_Sennheiser_USB_headset-00-headset.analog-stereo.monitor>
+		device.string = "2"
+
+pi@raspberrypi:~/RPi-Audio $ pacmd list-sinks | grep -e 'name:' -e 'index'
+    index: 0
+	name: <alsa_output.usb-Plantronics_Plantronics_C320-M_B52619D040EB8A4588BCB5D525E2A469-00-C320M.analog-stereo>
+  * index: 1
+	name: <alsa_output.0.analog-stereo>
+    index: 2
+	name: <combined>
+    index: 3
+	name: <alsa_output.usb-Sennheiser_Communications_Sennheiser_USB_headset-00-headset.analog-stereo>
+
+
+
+Sink#1
+alsa_output.usb-Plantronics_Plantronics_C320-M_B52619D040EB8A4588BCB5D525E2A469-00-C320M.analog-stereo
+
+Sink#0
+alsa_output.usb-Sennheiser_Communications_Sennheiser_USB_headset-00-headset.analog-stereo
+
+
+Source#0
+alsa_output.usb-Sennheiser_Communications_Sennheiser_USB_headset-00-headset.analog-stereo.monitor
+
+Source#1
+alsa_input.usb-Sennheiser_Communications_Sennheiser_USB_headset-00-headset.analog-mono
+
+Source#2
+alsa_output.usb-Plantronics_Plantronics_C320-M_B52619D040EB8A4588BCB5D525E2A469-00-C320M.analog-stereo.monitor
+
+Source#3
+alsa_input.usb-Plantronics_Plantronics_C320-M_B52619D040EB8A4588BCB5D525E2A469-00-C320M.analog-stereo
+
+
+
