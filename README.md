@@ -1,4 +1,4 @@
-  ## Table of Contents   
+  ## Table of contents   
   * [1. Cloning tools and code](#1-cloning-tools-and-code)
   * [2. SD card setup](#2-sd-card-setup)
      * [2.1 Using the raspbian wheezy image](#21-using-the-raspbian-wheezy-image)
