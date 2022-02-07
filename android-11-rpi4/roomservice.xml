@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Please do not manually edit this file-->
+<manifest>
+  <project path="kernel/brcm/arpi" name="android_kernel_brcm_arpi" remote="omnirom" revision="android-11" />
+  <project path="hardware/arpi" name="android_hardware_arpi" remote="omnirom" revision="android-11" />
+  <project path="vendor/brcm" name="proprietary_vendor_brcm" remote="omnirom" revision="android-11" />
+  <project path="external/gbm_gralloc" name="android_external_gbm_gralloc" remote="omnirom" revision="android-11" />
+  <project path="external/libgpiod" name="android_external_libgpiod" remote="omnirom" revision="android-11" />
+  <remove-project name="platform/external/drm_hwcomposer" />
+  <project path="external/drm_hwcomposer" name="lineage-rpi/android_external_drm_hwcomposer" remote="github" revision="lineage-17.1" />
+  <remove-project name="platform/external/libdrm" />
+  <project path="external/libdrm" name="lineage-rpi/android_external_libdrm" remote="github" revision="lineage-17.1" />
+  <remove-project name="platform/external/minigbm" />
+  <project path="external/minigbm" name="lineage-rpi/android_external_minigbm" remote="github" revision="lineage-17.1" />
+  <remove-project name="platform/external/mesa3d" />
+  <project path="external/mesa3d" name="maxwen/android_external_mesa3d" remote="github" revision="android-11-v20.2" />
+  <remove-project name="platform/packages/apps/Provision" />
+  <remove-project name="platform/packages/apps/Camera2" />
+</manifest>
