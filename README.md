@@ -21,12 +21,12 @@ A collection of notes, scripts, and projects for Raspberry Pi development — co
     - [1.2.1 Writing a Raspbian Image](#121-writing-a-raspbian-image)
     - [1.2.2 Cloning SD Cards](#122-cloning-sd-cards)
     - [1.2.3 Setting Up a Git Repository](#123-setting-up-a-git-repository)
-- [2. How the Pi Boots](#2-how-the-pi-boots)
+- [2. How does Pi boot](#2-how-does-pi-boot)
 - [3. Building a Custom Kernel](#3-building-a-custom-kernel)
   - [3.1 Moving to a Newer Kernel Branch](#31-moving-to-a-newer-kernel-branch)
   - [3.2 Cross-Compiling the Kernel](#32-cross-compiling-the-kernel)
-- [4. Bare-Metal Kernel from Scratch](#4-bare-metal-kernel-from-scratch)
-  - [4.1 Boot Entry Point](#41-boot-entry-point)
+- [4. Making our own minimalistic kernel](#4-making-our-own-minimalistic-kernel)
+  - [4.1 Booting the Operating System](#41-booting-the-operating-system)
   - [4.2 Kernel Implementation](#42-kernel-implementation)
   - [4.3 Linking the Kernel](#43-linking-the-kernel)
   - [4.4 Deploying to the Pi](#44-deploying-to-the-pi)
@@ -128,19 +128,26 @@ git push -u origin master
 
 ---
 
-## 2. How the Pi Boots
+## 2. How does Pi boot
 
-1. When the Raspberry Pi is first powered on, the ARM core is off and the GPU core is on. SDRAM is disabled.
-2. The GPU executes the first-stage bootloader (ROM code) stored on the SoC. It reads the SD card and loads the second-stage bootloader (`bootcode.bin`) into the L2 cache.
-3. `bootcode.bin` enables SDRAM, reads the third-stage bootloader (`loader.bin`) from the SD card into RAM, and runs it.
-4. `loader.bin` reads the GPU firmware (`start.elf`).
-5. `start.elf` reads `config.txt`, `cmdline.txt`, and `kernel.img`, then starts the ARM CPU running the kernel image.
+1. When the Raspberry Pi is first turned on, the ARM core is off, and the GPU core is on.
+   At this point the SDRAM is disabled.
+2. The GPU starts executing the first stage bootloader (ROM code), which is stored in ROM
+   on the SoC. The first stage bootloader reads the SD card, and loads the second stage
+   bootloader (bootcode.bin) into the L2 cache, and runs it.
+3. bootcode.bin enables SDRAM, and reads the third stage bootloader (loader.bin) from
+   the SD card into RAM, and runs it.
+4. loader.bin reads the GPU firmware (start.elf).
+5. start.elf reads config.txt, cmdline.txt and kernel.img, and at last the ARM cpu is
+   started running that kernel image.
 
-> `loader.bin` handles `.elf` files, which is needed to load `start.elf` at the top of memory (ARM uses SDRAM from address zero). There is a plan to add ELF loading support directly to `bootcode.bin`, which would make `loader.bin` unnecessary.
+loader.bin doesn't do much. It can handle .elf files, and so is needed to load start.elf
+at the top of memory (ARM uses SDRAM from address zero). There is a plan to add elf
+loading support to bootcode.bin, which would make loader.bin unnecessary, but it's a low
+priority (I guess it might save you 100ms on boot).
 
-**References:**
-- [Source — Raspberry Pi Stack Exchange](http://raspberrypi.stackexchange.com/questions/10489/how-does-raspberry-pi-boot)
-- [Bare-metal examples](https://github.com/dwelch67/raspberrypi)
+[Source](http://raspberrypi.stackexchange.com/questions/10489/how-does-raspberry-pi-boot)
+[Bare metal examples](https://github.com/dwelch67/raspberrypi)
 
 ---
 
@@ -220,20 +227,23 @@ Alternatively, use the [RPi 3 kernel builder script](https://gist.github.com/b-a
 
 ---
 
-## 4. Bare-Metal Kernel from Scratch
+## 4. Making our own minimalistic kernel
 
 > See also: [`bare-bones/`](bare-bones/) for source files.
 
-Three input files are needed:
-1. `boot.S` — kernel entry point that sets up the processor environment
-2. `kernel.c` — kernel routines
-3. `linker.ld` — linker script
+We need three input files:
+1. `boot.s` - kernel entry point that sets up the processor environment
+2. `kernel.c` - your actual kernel routines
+3. `linker.ld` - for linking the above files
+4. Booting the kernel
 
-### 4.1 Boot Entry Point
+### 4.1 Booting the Operating System
 
-The `.text.boot` section is placed first in the kernel image by the linker script. It initializes a minimal C environment (stack + zeroed BSS) before calling `kernel_main`.
+The section `.text.boot` will be used in the linker script to place the `boot.S` as
+the very first thing in our kernel image. The code initializes a minimum C environment,
+which means having a stack and zeroing the BSS segment, before calling the `kernel_main` function.
 
-> The code deliberately avoids using `r0–r2` so those registers remain valid for the `kernel_main` call.
+Note that the code avoids using `r0-r2` so the remain valid for the `kernel_main` call.
 
 Assemble `boot.S`:
 ```
