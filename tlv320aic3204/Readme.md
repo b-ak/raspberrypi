@@ -4,7 +4,7 @@ This project targets the **TI C5505 DSP** in **Code Composer Studio v4** and dem
 
 - **Codec 1:** controlled over **I2C**
 - **Codec 2:** controlled over **SPI**
-
+****
 ## Overview
 
 The firmware initializes and configures two TLV320AIC3204 devices using different control buses on the same DSP platform.
