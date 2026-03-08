@@ -1,0 +1,1 @@
+"./src/vectors.obj" "./src/usbstk5505_spi.obj" "./src/usbstk5505_led.obj" "./src/usbstk5505_intr.obj" "./src/usbstk5505_i2c.obj" "./src/usbstk5505_gpio.obj" "./src/usbstk5505.obj" "./src/main.obj" "./src/aic3204_init.obj" "./src/aic3204.obj" "./src/PLL.obj" "./src/IIR_filters_fourth_order.obj" -l"rts55x.lib" "../cslVC5505.lib" "../lnkx.cmd" 
